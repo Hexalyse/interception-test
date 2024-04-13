@@ -76,7 +76,7 @@ def find_patch_with_threshold(patch, image, similarity_threshold, debug=False):
     if not (0 <= similarity_threshold <= 1):
         raise ValueError("The similarity threshold must be between 0 and 1.")
 
-    # Perform the matching operation on the larger image
+    # Perform the matching operation
     result = cv2.matchTemplate(image, patch, cv2.TM_CCORR_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     if debug:
