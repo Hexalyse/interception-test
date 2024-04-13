@@ -20,6 +20,6 @@ print
 for match in matches:
     center = get_center_of_match(match, patch)
     organic_move_to(center[0], center[1], 200, generate_mouse_delay())
-    #interception.mouse_down("left", generate_mouse_delay())
-    #interception.mouse_up("left", 0)
+    interception.mouse_down("left", generate_mouse_delay())
+    interception.mouse_up("left", 0)
     time.sleep(0.5)
