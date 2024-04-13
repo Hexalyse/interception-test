@@ -96,7 +96,7 @@ def matchTemplate_with_threshold(
         raise ValueError("The similarity threshold must be between 0 and 1.")
 
     # Perform the matching operation
-    result = cv2.matchTemplate(image, patch, cv2.TM_CCORR)
+    result = cv2.matchTemplate(image, patch, cv2.TM_CCORR_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     if debug:
         print(f"Max similarity: {max_val}")
