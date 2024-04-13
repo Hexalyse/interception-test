@@ -5,6 +5,13 @@ import random
 import cv2
 import numpy as np
 
+last_frame = None
+def grab_frame(camera):
+    global last_frame
+    frame = camera.grab()
+    if frame is not None:
+      last_frame = frame
+    return last_frame
 
 def smooth_move_to(target_x, target_y, duration_ms):
     start_x, start_y = interception.mouse_position()
@@ -30,7 +37,7 @@ def smooth_move_to(target_x, target_y, duration_ms):
     interception.move_to(target_x, target_y)
 
 
-def organic_move_to(target_x, target_y, duration_ms):
+def organic_move_to(target_x, target_y, duration_ms, delay_after = 0.0):
     start_x, start_y = interception.mouse_position()
     steps = int(
         duration_ms / 10
@@ -39,11 +46,11 @@ def organic_move_to(target_x, target_y, duration_ms):
     distance_y = abs(target_y - start_y)
     # Introducing a control point for Bezier curve
     mid_x = (start_x + target_x) / 2 + random.randint(
-        int(-distance_x / 10), int(distance_x / 10)
-    )  # Random deviation for organic effect
+        int(-distance_x / 7), int(distance_x / 7)
+    )  # Random deviation for organic effect, 7 seems like a good constant
     mid_y = (start_y + target_y) / 2 + random.randint(
-        int(-distance_y / 10), int(distance_x / 10)
-    )  # Random deviation for organic effect
+        int(-distance_y / 7), int(distance_x / 7)
+    )  # Random deviation for organic effect, 7 seems like a good constant
 
     for i in range(steps):
         progress = i / steps
@@ -70,6 +77,8 @@ def organic_move_to(target_x, target_y, duration_ms):
 
     # Ensure the mouse ends up at the exact target position
     interception.move_to(target_x, target_y)
+    if delay_after > 0:
+        time.sleep(delay_after)
 
 
 def matchTemplate_with_threshold(patch, image, similarity_threshold, debug=False, showMatched=False):
@@ -117,3 +126,6 @@ def findAllTemplate_with_threshold(patch, image, similarity_threshold, debug=Fal
 
     # Return True if the best match meets or exceeds the percentage threshold, otherwise False
     return locations
+
+def get_center_of_match(location, patch):
+    return location[0] + patch.shape[0] / 2, location[1] + patch.shape[1] / 2
