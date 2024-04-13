@@ -71,7 +71,7 @@ def organic_move_to(target_x, target_y, duration_ms):
     interception.move_to(target_x, target_y)
 
 
-def find_patch_with_threshold(patch, image, similarity_threshold, debug=False):
+def find_patch_with_threshold(patch, image, similarity_threshold, debug=False, showMatched=False):
     # Ensure the input threshold is within the expected range
     if not (0 <= similarity_threshold <= 1):
         raise ValueError("The similarity threshold must be between 0 and 1.")
@@ -81,6 +81,7 @@ def find_patch_with_threshold(patch, image, similarity_threshold, debug=False):
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     if debug:
         print(f"Max similarity: {max_val}")
+    if showMatched:
         top_left = max_loc
         bottom_right = (top_left[0] + patch.shape[0], top_left[1] + patch.shape[1])
         # Draw a rectangle around the matched region
