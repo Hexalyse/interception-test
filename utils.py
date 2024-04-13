@@ -2,6 +2,7 @@ import interception
 import time
 import math
 import random
+import cv2
 
 
 def smooth_move_to(target_x, target_y, duration_ms):
@@ -68,3 +69,34 @@ def organic_move_to(target_x, target_y, duration_ms):
 
     # Ensure the mouse ends up at the exact target position
     interception.move_to(target_x, target_y)
+
+
+def find_patch_with_threshold(patch, image, similarity_threshold, debug=False):
+    # Ensure the input threshold is within the expected range
+    if not (0 <= similarity_threshold <= 1):
+        raise ValueError("The similarity threshold must be between 0 and 1.")
+
+    # Match the template against itself to find the maximum max_val for a perfect match
+    result_self = cv2.matchTemplate(patch, patch, cv2.TM_CCORR_NORMED)
+    _, max_val_self, _, _ = cv2.minMaxLoc(result_self)
+
+    # Perform the matching operation on the larger image
+    result = cv2.matchTemplate(image, patch, cv2.TM_CCORR_NORMED)
+    _, max_val, _, max_loc = cv2.minMaxLoc(result)
+    if debug:
+        print(f"Max similarity: {max_val}")
+
+    top_left = max_loc
+    bottom_right = (top_left[0] + patch.shape[0], top_left[1] + patch.shape[1])
+
+    if debug:
+        # Draw a rectangle around the matched region
+        cv2.rectangle(image, top_left, bottom_right, 255, 2)
+        resized = cv2.resize(image, (1920, 1080))
+        cv2.imshow("Matched Image", resized)
+
+    # Calculate the threshold based on the maximum perfect match value
+    effective_threshold = similarity_threshold * max_val_self
+
+    # Return True if the best match meets or exceeds the percentage threshold, otherwise False
+    return max_val >= effective_threshold

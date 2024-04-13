@@ -1,7 +1,15 @@
 import interception
-from utils import smooth_move_to, organic_move_to
+from utils import smooth_move_to, organic_move_to, find_patch_with_threshold
+import dxcam
+from PIL import Image
+import cv2
 
+camera = dxcam.create(output_color="BGR")
 
-interception.auto_capture_devices(keyboard=True, mouse=True, verbose=True)
+interception.auto_capture_devices(keyboard=True, mouse=True)
+frame = camera.grab()
 
-organic_move_to(500, 500, 1000)
+patch = cv2.imread('images/image.png')
+match_found = find_patch_with_threshold(patch, frame, 0.99)
+if match_found:
+    print('Match found')

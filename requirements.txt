@@ -1,4 +1,9 @@
+comtypes==1.4.1
+dxcam==0.0.5
 interception-python==0.0.1
+numpy==1.26.4
+opencv-python==4.9.0.80
+pillow==10.3.0
 pynput==1.7.6
 pypiwin32==223
 pywin32==306
