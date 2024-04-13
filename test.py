@@ -1,5 +1,5 @@
 import interception
-from utils import smooth_move_to, organic_move_to, find_patch_with_threshold
+from utils import smooth_move_to, organic_move_to, matchTemplate_with_threshold, findAllTemplate_with_threshold
 import dxcam
 from PIL import Image
 import cv2
@@ -15,14 +15,14 @@ def grab_frame(camera):
 
 interception.auto_capture_devices(keyboard=True, mouse=True)
 camera = dxcam.create(output_color="GRAY")
-patch = cv2.imread('images/image.png', 0)
+patch = cv2.imread('images/image2.png', 0)
 
 t1_start = perf_counter() 
-for i in range(50):
+for i in range(1):
   frame = grab_frame(camera)
-  match_found = find_patch_with_threshold(patch, frame, 0.98)
-  if match_found:
-      print('Match found')
+  matches = findAllTemplate_with_threshold(patch, frame, 0.98, showMatched=True)
+  if matches:
+      print(matches)
 
 t1_stop = perf_counter()
  

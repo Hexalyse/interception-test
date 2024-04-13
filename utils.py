@@ -3,6 +3,7 @@ import time
 import math
 import random
 import cv2
+import numpy as np
 
 
 def smooth_move_to(target_x, target_y, duration_ms):
@@ -71,13 +72,13 @@ def organic_move_to(target_x, target_y, duration_ms):
     interception.move_to(target_x, target_y)
 
 
-def find_patch_with_threshold(patch, image, similarity_threshold, debug=False, showMatched=False):
+def matchTemplate_with_threshold(patch, image, similarity_threshold, debug=False, showMatched=False):
     # Ensure the input threshold is within the expected range
     if not (0 <= similarity_threshold <= 1):
         raise ValueError("The similarity threshold must be between 0 and 1.")
 
     # Perform the matching operation
-    result = cv2.matchTemplate(image, patch, cv2.TM_CCORR_NORMED)
+    result = cv2.matchTemplate(image, patch, cv2.TM_CCORR)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     if debug:
         print(f"Max similarity: {max_val}")
@@ -92,3 +93,27 @@ def find_patch_with_threshold(patch, image, similarity_threshold, debug=False, s
 
     # Return True if the best match meets or exceeds the percentage threshold, otherwise False
     return max_val >= similarity_threshold
+
+def findAllTemplate_with_threshold(patch, image, similarity_threshold, debug=False, showMatched=False):
+    # Ensure the input threshold is within the expected range
+    if not (0 <= similarity_threshold <= 1):
+        raise ValueError("The similarity threshold must be between 0 and 1.")
+
+    # Perform the matching operation
+    result = cv2.matchTemplate(image, patch, cv2.TM_CCORR_NORMED)
+    loc = np.where(result >= similarity_threshold)
+    locations = list(zip(*loc[::-1]))
+    if debug:
+        print(f"Matches: {locations}")
+    if showMatched:
+        for pt in locations:
+            top_left = pt
+            bottom_right = (top_left[0] + patch.shape[0], top_left[1] + patch.shape[1])
+            # Draw a rectangle around the matched region
+            cv2.rectangle(image, top_left, bottom_right, 255, 2)
+        resized = cv2.resize(image, (1920, 1080))
+        cv2.imshow("Matched Image", resized)
+        cv2.waitKey(0)
+
+    # Return True if the best match meets or exceeds the percentage threshold, otherwise False
+    return locations
