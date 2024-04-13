@@ -76,10 +76,6 @@ def find_patch_with_threshold(patch, image, similarity_threshold, debug=False):
     if not (0 <= similarity_threshold <= 1):
         raise ValueError("The similarity threshold must be between 0 and 1.")
 
-    # Match the template against itself to find the maximum max_val for a perfect match
-    result_self = cv2.matchTemplate(patch, patch, cv2.TM_CCORR_NORMED)
-    _, max_val_self, _, _ = cv2.minMaxLoc(result_self)
-
     # Perform the matching operation on the larger image
     result = cv2.matchTemplate(image, patch, cv2.TM_CCORR_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
@@ -94,9 +90,7 @@ def find_patch_with_threshold(patch, image, similarity_threshold, debug=False):
         cv2.rectangle(image, top_left, bottom_right, 255, 2)
         resized = cv2.resize(image, (1920, 1080))
         cv2.imshow("Matched Image", resized)
-
-    # Calculate the threshold based on the maximum perfect match value
-    effective_threshold = similarity_threshold * max_val_self
+        cv2.waitKey(0)
 
     # Return True if the best match meets or exceeds the percentage threshold, otherwise False
-    return max_val >= effective_threshold
+    return max_val >= similarity_threshold

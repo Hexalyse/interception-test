@@ -9,7 +9,7 @@ camera = dxcam.create(output_color="BGR")
 interception.auto_capture_devices(keyboard=True, mouse=True)
 frame = camera.grab()
 
-patch = cv2.imread('images/image.png')
-match_found = find_patch_with_threshold(patch, frame, 0.99)
+patch = cv2.imread('images/firefox.png')
+match_found = find_patch_with_threshold(patch, frame, 0.998, debug=True)
 if match_found:
     print('Match found')
