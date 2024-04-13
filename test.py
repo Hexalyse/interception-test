@@ -10,6 +10,6 @@ interception.auto_capture_devices(keyboard=True, mouse=True)
 frame = camera.grab()
 
 patch = cv2.imread('images/firefox.png')
-match_found = find_patch_with_threshold(patch, frame, 0.998, debug=True)
+match_found = find_patch_with_threshold(patch, frame, 0.998)
 if match_found:
     print('Match found')

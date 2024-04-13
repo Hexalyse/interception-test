@@ -81,11 +81,8 @@ def find_patch_with_threshold(patch, image, similarity_threshold, debug=False):
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     if debug:
         print(f"Max similarity: {max_val}")
-
-    top_left = max_loc
-    bottom_right = (top_left[0] + patch.shape[0], top_left[1] + patch.shape[1])
-
-    if debug:
+        top_left = max_loc
+        bottom_right = (top_left[0] + patch.shape[0], top_left[1] + patch.shape[1])
         # Draw a rectangle around the matched region
         cv2.rectangle(image, top_left, bottom_right, 255, 2)
         resized = cv2.resize(image, (1920, 1080))
