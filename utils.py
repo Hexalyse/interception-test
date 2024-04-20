@@ -140,7 +140,7 @@ def findAllTemplate_with_threshold(
     return locations
 
 
-def image_at_position(image, patch, position, threshold, percentage_similar):
+def image_at_position(image, patch, position, threshold=0, percentage_similar=100):
     # Extract the region of the image around the specified position
     cut_frame = image[
         position[1] : position[1] + patch.shape[0],
@@ -152,7 +152,7 @@ def image_at_position(image, patch, position, threshold, percentage_similar):
 
 # Use this to compare images with a threshold and percentage of similarity
 # This is faster than calling matchTemplate_with_threshold on two images of the same size
-def check_images_similar(image1, image2, threshold, percentage_similar, debug=False):
+def check_images_similar(image1, image2, threshold=0, percentage_similar=100, debug=False):
     # Calculate the absolute differences between the two images
     differences = np.abs(image1 - image2)
 
