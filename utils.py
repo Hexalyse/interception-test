@@ -139,6 +139,40 @@ def findAllTemplate_with_threshold(
     # Return True if the best match meets or exceeds the percentage threshold, otherwise False
     return locations
 
+# Use this to compare images with a threshold and percentage of similarity
+# This is faster than calling matchTemplate_with_threshold on two images of the same size
+def check_images_similar(image1, image2, threshold, percentage_similar, debug=False):
+    # Calculate the absolute differences between the two images
+    differences = np.abs(image1 - image2)
+    
+    # Check if differences are less than the threshold
+    similar_pixels = differences <= threshold
+    
+    # Calculate the percentage of pixels that are similar
+    total_pixels = similar_pixels.size
+    similar_count = np.sum(similar_pixels)
+    similar_percentage = (similar_count / total_pixels) * 100
+
+    if debug:
+        print(f"Similarity: {similar_percentage:.2f}%")
+    
+    # Return True if the percentage of similar pixels is at least percentage_similar
+    return similar_percentage >= percentage_similar
+
+
+def check_pixel_color(image, position, color, threshold=0):
+    # Extract the color of the pixel at the specified position
+    pixel_color = image[position[1], position[0]]
+    # Check if the pixel color matches the expected color within the threshold
+    return all(abs(pixel_color[i] - color[i]) <= threshold for i in range(3))
+
+
+def check_pixel_grayscale(image, position, color, threshold=0):
+    # Extract the color of the pixel at the specified position
+    pixel_color = image[position[1], position[0]]
+    # Check if the pixel color matches the expected color within the threshold
+    return abs(pixel_color - color) <= threshold
+
 
 def get_center_of_match(location, patch):
     return location[0] + patch.shape[0] / 2, location[1] + patch.shape[1] / 2
