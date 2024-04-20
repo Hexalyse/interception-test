@@ -184,6 +184,11 @@ def check_pixel_grayscale(image, position, color, threshold=0):
     # Check if the pixel color matches the expected color within the threshold
     return abs(pixel_color - color) <= threshold
 
+def color_present_in_region(image, color, region, threshold=0):
+    # Extract the region of the image
+    cut_frame = image[region[1]:region[3], region[0]:region[2]]
+    # Check if the color is present in the region
+    return np.any(np.all(np.abs(cut_frame - color) <= threshold, axis=2))
 
 def get_center_of_match(location, patch):
     return location[0] + patch.shape[0] / 2, location[1] + patch.shape[1] / 2
