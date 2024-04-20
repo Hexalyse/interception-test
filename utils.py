@@ -155,10 +155,10 @@ def image_at_position(image, patch, position, threshold, percentage_similar):
 def check_images_similar(image1, image2, threshold, percentage_similar, debug=False):
     # Calculate the absolute differences between the two images
     differences = np.abs(image1 - image2)
-    
+
     # Check if differences are less than the threshold
     similar_pixels = differences <= threshold
-    
+
     # Calculate the percentage of pixels that are similar
     total_pixels = similar_pixels.size
     similar_count = np.sum(similar_pixels)
@@ -166,7 +166,7 @@ def check_images_similar(image1, image2, threshold, percentage_similar, debug=Fa
 
     if debug:
         print(f"Similarity: {similar_percentage:.2f}%")
-    
+
     # Return True if the percentage of similar pixels is at least percentage_similar
     return similar_percentage >= percentage_similar
 
@@ -184,11 +184,13 @@ def check_pixel_grayscale(image, position, color, threshold=0):
     # Check if the pixel color matches the expected color within the threshold
     return abs(pixel_color - color) <= threshold
 
+
 def color_present_in_region(image, color, region, threshold=0):
     # Extract the region of the image
-    cut_frame = image[region[1]:region[3], region[0]:region[2]]
+    cut_frame = image[region[1] : region[3], region[0] : region[2]]
     # Check if the color is present in the region
     return np.any(np.all(np.abs(cut_frame - color) <= threshold, axis=2))
+
 
 def get_center_of_match(location, patch):
     return location[0] + patch.shape[0] / 2, location[1] + patch.shape[1] / 2
