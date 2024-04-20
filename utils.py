@@ -139,6 +139,17 @@ def findAllTemplate_with_threshold(
     # Return True if the best match meets or exceeds the percentage threshold, otherwise False
     return locations
 
+
+def image_at_position(image, patch, position, threshold, percentage_similar):
+    # Extract the region of the image around the specified position
+    cut_frame = image[
+        position[1] : position[1] + patch.shape[0],
+        position[0] : position[0] + patch.shape[1],
+    ]
+    # Check if the extracted region is similar to the patch
+    return check_images_similar(cut_frame, patch, threshold, percentage_similar)
+
+
 # Use this to compare images with a threshold and percentage of similarity
 # This is faster than calling matchTemplate_with_threshold on two images of the same size
 def check_images_similar(image1, image2, threshold, percentage_similar, debug=False):

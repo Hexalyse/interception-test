@@ -24,3 +24,37 @@ print(match_found)
 # display frame
 similar = check_images_similar(patch, cut_frame, 0, 90, debug=True)
 print(similar)
+
+# Start the timer
+start_time = time.time()
+
+# Repeat the function 100 times
+for _ in range(1000):
+    matchTemplate_with_threshold(patch, frame, 0.98)
+
+# Stop the timer
+end_time = time.time()
+
+# Calculate the elapsed time
+elapsed_time = end_time - start_time
+
+# print framerate
+print(f"Elapsed time: {elapsed_time:.2f} seconds")
+print(f"Frame rate: {1000 / elapsed_time:.2f} frames per second")
+
+# Start the timer
+start_time = time.time()
+
+# Repeat the function 100 times
+for _ in range(10000):
+    check_images_similar(patch, cut_frame, 0, 90)
+
+# Stop the timer
+end_time = time.time()
+
+# Calculate the elapsed time
+elapsed_time = end_time - start_time
+
+# print framerate
+print(f"Elapsed time: {elapsed_time:.2f} seconds")
+print(f"Frame rate: {10000 / elapsed_time:.2f} frames per second")
